@@ -20,7 +20,8 @@ public class JavaFXCalculator extends Application {
       "7", "8", "9", "+",
       "4", "5", "6", "-",
       "1", "2", "3", "x",
-      "C", "0", "=", "/"
+      "C", "0", "=", "/",
+      "M+", "M-", "MR", "MC"
    };
    // For computation
    private int result = 0;      // Result of computation
@@ -127,7 +128,7 @@ public class JavaFXCalculator extends Application {
       }
 
       // Setup 16 Buttons and add to GridPane; and event handler
-      btns = new Button[16];
+      btns = new Button[20];
       for (int i = 0; i < btns.length; ++i) {
          btns[i] = new Button(btnLabels[i]);
          btns[i].setOnAction(handler);  // Register event handler
