@@ -59,7 +59,7 @@ public class JavaFXCalculator extends Application {
 				compute();
 				lastOperator = '*';
 				break;
-			case "/":
+			case "\u00F7":
 				compute();
 				lastOperator = '\u00F7';
 				break;
@@ -86,11 +86,13 @@ public class JavaFXCalculator extends Application {
 			// Memory Recall Button  
 			case "MR":
 				inStr = String.valueOf(memory);
-				tfDisplay.setText(memory + "");
+				memoryText.setText(memory + "");
 				break;
 			
 			// Memory Clear Button
 			case "MC":
+				memoryText.setText("0");
+				break;
 		}
 	};
 
