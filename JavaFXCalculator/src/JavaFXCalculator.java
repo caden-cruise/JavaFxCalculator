@@ -26,13 +26,14 @@ public class JavaFXCalculator extends Application {
 	// Previous operator: ' '(nothing), '+', '-', '*', '\u00F7', '='
 	private char lastOperator = ' ';
 
-	// Event handler for all the 20 Buttons
+	// Event handler for all the 24 Buttons
 	EventHandler handler = evt -> {
 		String currentBtnLabel = ((Button)evt.getSource()).getText();
 		switch (currentBtnLabel) {
 			// Number buttons
 			case "0": case "1": case "2": case "3": case "4":
 			case "5": case "6": case "7": case "8": case "9":
+			case ".":
 				if (inStr.equals("0")) {
 					inStr = currentBtnLabel;  // no leading zero
 				} else {
@@ -46,7 +47,7 @@ public class JavaFXCalculator extends Application {
 				}
 				break;
 
-			// Operator buttons: '+', '-', 'x', '\u00F7' and '='
+			// Operator buttons: '+', '-', 'x', '\u00F7', and '='
 			case "+":
 				compute();
 				lastOperator = '+';
@@ -59,13 +60,27 @@ public class JavaFXCalculator extends Application {
 				compute();
 				lastOperator = '*';
 				break;
-			case "\u00F7":
+			case "\u00F7": //divide
 				compute();
 				lastOperator = '\u00F7';
 				break;
 			case "=":
 				compute();
 				lastOperator = '=';
+				break;
+				
+			case "^":
+				compute();
+				lastOperator = '^';
+				break;
+				
+			case "\u221a": // square root
+				result = Math.sqrt(result);
+				break;
+				
+			case "\u2190": // backspace arrow
+				
+				lastOperator = '\u2190';
 				break;
 	
 			// Clear button
@@ -78,20 +93,26 @@ public class JavaFXCalculator extends Application {
 			
 			// Memory Add Button
 			case "M+":
-				
+				memory += result;
+				memoryText.setText("Memory = " + memory);
+				break;
 				
 			// Memory Subtract Button
 			case "M-":
+				memory -= result;
+				memoryText.setText("Memory = " + memory);
+				break;
 				
 			// Memory Recall Button  
 			case "MR":
 				inStr = String.valueOf(memory);
-				memoryText.setText(memory + "");
+				tfDisplay.setText(memory + "");
 				break;
-			
+				
 			// Memory Clear Button
 			case "MC":
-				memoryText.setText("0");
+				memory = 0;
+				memoryText.setText("Memory = 0");
 				break;
 		}
 	};
@@ -114,6 +135,8 @@ public class JavaFXCalculator extends Application {
 			result /= inNum;
 		} else if (lastOperator == '=') {
 			// Keep the result for the next operation
+		} else if (lastOperator =='^') {
+			result = Math.pow(result, inNum);
 		}
 		tfDisplay.setText(result + "");
 	}
