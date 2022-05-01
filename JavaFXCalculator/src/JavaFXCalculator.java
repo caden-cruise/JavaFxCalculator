@@ -14,19 +14,57 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+/**
+ * The JavaFx Calculator extends the Application function from a prior source code
+ * This is a basic calculator with working memory, backspace, decimal place, and 
+ * square root, and power buttons.
+ * 
+ * @author Caden Cruise
+ * @version 1.0
+ * @since 2022.04.24
+ *
+ */
 public class JavaFXCalculator extends Application {
+	
+	/**
+	 * Field used to display stored memory.
+	 */
 	private Text memoryText;		// display memory text
+	
+	/**
+	 * Field used to display the text on the screen.
+	 */
 	private TextField tfDisplay;    // display textfield
 		
 	
 	// For computation
+	
+	/**
+	 * Field to create and store the memory value. 
+	 */
 	private double memory = 0;		// memory.
+	
+	/**
+	 * Field used to create and store the result of a calculation on screen.
+	 */
 	private double result = 0;   	// Result of computation
+	
+	/**
+	 * Field used to input the current button pressed on the calculator. 
+	 */
 	private String inStr = "0";  	// Input number as String
 	// Previous operator: ' '(nothing), '+', '-', '*', '\u00F7', '='
+	
+	/**
+	 * Field used to store the last operator pressed on the calculator.
+	 */
 	private char lastOperator = ' ';
 
 	// Event handler for all the 24 Buttons
+	
+	/**
+	 * Handles the switch case for all working buttons on the calculator.
+	 */
 	EventHandler handler = evt -> {
 		String currentBtnLabel = ((Button)evt.getSource()).getText();
 		switch (currentBtnLabel) {
@@ -47,7 +85,8 @@ public class JavaFXCalculator extends Application {
 				}
 				break;
 
-			// Operator buttons: '+', '-', 'x', '\u00F7', and '='
+			// Operator buttons: '+', '-', 'x', '\u00F7' = divide symbol, 
+			//	'=', '^', '\u221a' = square root symbol, '\u2190' = backspace arrow
 			case "+":
 				compute();
 				lastOperator = '+';
@@ -69,7 +108,7 @@ public class JavaFXCalculator extends Application {
 				lastOperator = '=';
 				break;
 				
-			case "^":
+			case "^": // power
 				compute();
 				lastOperator = '^';
 				break;
@@ -79,8 +118,15 @@ public class JavaFXCalculator extends Application {
 				break;
 				
 			case "\u2190": // backspace arrow
-				
-				lastOperator = '\u2190';
+				String backspace=null;
+				if (tfDisplay.getText().length() > 1) {
+					StringBuilder strB = new StringBuilder(tfDisplay.getText());
+					strB.deleteCharAt(tfDisplay.getText().length() - 1);
+					backspace = strB.toString();
+					tfDisplay.setText(backspace);
+					
+				} else tfDisplay.setText("0");
+									
 				break;
 	
 			// Clear button
@@ -117,9 +163,13 @@ public class JavaFXCalculator extends Application {
 		}
 	};
 
-	// User pushes '+', '-', '*', '\u00F7' or '=' button.
+	// User pushes '+', '-', '*', '\u00F7', '^', or '=' button.
 	// Perform computation on the previous result and the current input number,
 	// based on the previous operator.
+	
+	/**
+	 * Method that does the basic math function when an operator is pressed. 
+	 */
 	private void compute() {
 		double inNum = Double.parseDouble(inStr);
 		inStr = "0";
@@ -135,13 +185,16 @@ public class JavaFXCalculator extends Application {
 			result /= inNum;
 		} else if (lastOperator == '=') {
 			// Keep the result for the next operation
-		} else if (lastOperator =='^') {
+		} else if (lastOperator == '^') {
 			result = Math.pow(result, inNum);
-		}
-		tfDisplay.setText(result + "");
+		} tfDisplay.setText(result + "");
 	}
+	
 
 	// Setup the UI
+	/**
+	 *Method to set up the working UI of the calculator.
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		Button[] btns;          // 20 buttons
@@ -178,14 +231,14 @@ public class JavaFXCalculator extends Application {
 			paneButton.getColumnConstraints().add(columns[i]);
 		}
 
-		// Setup 16 Buttons and add to GridPane; and event handler
+		// Setup 24 Buttons and add to GridPane; and event handler
 		btns = new Button[24];
 		for (int i = 0; i < btns.length; ++i) {
 			btns[i] = new Button(btnLabels[i]);
 			
 			switch(btnLabels[i]) {
 				case "C":
-				case "\u2190":
+				case "\u2190": // backspace arrow
 					btns[i].setStyle("-fx-color: orange");
 					break;
 					
@@ -214,6 +267,9 @@ public class JavaFXCalculator extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * @param args No command line input args are used for this application
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
